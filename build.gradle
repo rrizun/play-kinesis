@@ -1,0 +1,39 @@
+plugins {
+	id "org.springframework.boot" version "2.2.0.RELEASE"
+}
+
+apply plugin: "java"
+apply plugin: "io.spring.dependency-management"
+
+repositories {
+	jcenter()
+	mavenCentral()
+}
+
+dependencies {
+	implementation "com.google.code.gson:gson:+"
+	implementation "com.google.guava:guava:+"
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation "org.apache.kafka:kafka-clients:+"
+	implementation "org.apache.kafka:kafka-streams:+"
+
+	// aws sdk 2
+	implementation platform('software.amazon.awssdk:bom:+')
+	implementation 'software.amazon.awssdk:kinesis'
+
+	// aws kinesis kcl
+	// implementation 'software.amazon.kinesis:amazon-kinesis-client:2.2.4'
+
+	implementation 'com.amazonaws:amazon-kinesis-producer:+'
+
+// 	<dependency>
+//     <groupId>software.amazon.kinesis</groupId>
+//     <artifactId>amazon-kinesis-client</artifactId>
+//     <version>2.2.4</version>
+// </dependency>
+
+}
+
+configurations {
+    all*.exclude module : 'spring-boot-starter-logging'
+}
