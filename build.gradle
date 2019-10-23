@@ -11,6 +11,10 @@ repositories {
 }
 
 dependencies {
+	implementation "org.slf4j:slf4j-api"
+	// implementation "ch.qos.logback:logback-core"
+	implementation "org.slf4j:slf4j-simple"
+
 	implementation "com.google.code.gson:gson:+"
 	implementation "com.google.guava:guava:+"
 	implementation "org.springframework.boot:spring-boot-starter-web"
