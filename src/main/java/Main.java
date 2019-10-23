@@ -5,11 +5,7 @@ import com.amazonaws.services.kinesis.producer.KinesisProducer;
 import com.amazonaws.services.kinesis.producer.KinesisProducerConfiguration;
 import com.google.common.collect.Lists;
 
-import software.amazon.awssdk.services.kinesis.KinesisClient;
-
 public class Main {
-
-    static KinesisClient kinesisClient = KinesisClient.create();
 
     public static void main(String... args) throws Exception {
 
