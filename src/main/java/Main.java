@@ -42,7 +42,7 @@ public class Main {
             while (true) {
                 try {
                     log("addUserRecord[1]");
-                    log(kinesis.addUserRecord(streamName, "myPartitionKey", ByteBuffer.wrap("myData".getBytes("UTF-8"))).get());
+                    log(kinesis.addUserRecord(streamName, "myPartitionKey", ByteBuffer.wrap("myData".getBytes("UTF-8"))));
                     log("addUserRecord[2]");
                 } finally {
                     // Thread.sleep(2000);
