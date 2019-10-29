@@ -7,7 +7,7 @@ apply plugin: "io.spring.dependency-management"
 
 repositories {
 	jcenter()
-	mavenCentral()
+	// mavenCentral()
 }
 
 dependencies {
@@ -21,25 +21,13 @@ dependencies {
 	implementation "org.apache.kafka:kafka-clients:+"
 	implementation "org.apache.kafka:kafka-streams:+"
 
-	// aws kinesis kcl
-	// implementation 'software.amazon.kinesis:amazon-kinesis-client:2.2.4'
-
-	implementation 'com.amazonaws:amazon-kinesis-producer:+'
-
-		// <dependency>
-		// 	<groupId>com.amazonaws</groupId>
-		// 	<artifactId>amazon-kinesis-client</artifactId>
-		// 	<version>1.7.3</version>
-		// </dependency>
-		// <dependency>
-		// 	<groupId>com.amazonaws</groupId>
-		// 	<artifactId>amazon-kinesis-producer</artifactId>
-		// 	<version>0.12.8</version>
-		// </dependency>
-
-	// // aws sdk 2
-	// implementation platform('software.amazon.awssdk:bom:+')
+	// aws sdk 2
+	implementation platform('software.amazon.awssdk:bom:+')
 	// implementation 'software.amazon.awssdk:kinesis'
+
+	// aws kinesis
+	implementation 'com.amazonaws:amazon-kinesis-producer:+' // kpl
+	implementation 'software.amazon.kinesis:amazon-kinesis-client:+' // kcl 2.x
 
 }
 
