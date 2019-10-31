@@ -1,3 +1,5 @@
+package foo;
+
 import org.slf4j.*;
 
 import com.google.common.base.*;
