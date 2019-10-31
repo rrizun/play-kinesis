@@ -23,7 +23,7 @@ public class MyProducer {
                     // log(kinesis.addUserRecord(streamName, "myPartitionKey", ByteBuffer.wrap("myData".getBytes("UTF-8"))).get());
                     log("addUserRecord[2]");
                 } finally {
-                    // Thread.sleep(50);
+                    Thread.sleep(1);
                 }
             }
         } finally {
