@@ -3,6 +3,7 @@ package foo;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import com.google.common.collect.Lists;
 
@@ -14,8 +15,6 @@ import software.amazon.awssdk.services.cloudwatch.CloudWatchAsyncClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.kinesis.KinesisAsyncClient;
 import software.amazon.kinesis.common.ConfigsBuilder;
-import software.amazon.kinesis.common.InitialPositionInStream;
-import software.amazon.kinesis.common.InitialPositionInStreamExtended;
 import software.amazon.kinesis.common.KinesisClientUtil;
 import software.amazon.kinesis.coordinator.Scheduler;
 import software.amazon.kinesis.lifecycle.events.InitializationInput;
@@ -24,7 +23,6 @@ import software.amazon.kinesis.lifecycle.events.ProcessRecordsInput;
 import software.amazon.kinesis.lifecycle.events.ShardEndedInput;
 import software.amazon.kinesis.lifecycle.events.ShutdownRequestedInput;
 import software.amazon.kinesis.processor.ShardRecordProcessor;
-import software.amazon.kinesis.retrieval.KinesisClientRecord;
 import software.amazon.kinesis.retrieval.polling.PollingConfig;
 
 class MyShardRecordProcessor implements ShardRecordProcessor {
@@ -47,7 +45,6 @@ class MyShardRecordProcessor implements ShardRecordProcessor {
     @Override
     public void leaseLost(LeaseLostInput leaseLostInput) {
         log("leaseLost", leaseLostInput);
-
     }
 
     @Override
@@ -84,9 +81,11 @@ public class MyConsumer {
         SpringApplication.run(MyConsumer.class, args);
     }
 
+    private Scheduler scheduler;
+
     // https://docs.aws.amazon.com/streams/latest/dev/kcl2-standard-consumer-java-example.html
     @PostConstruct
-    public static void init() throws Exception {
+    public void init() throws Exception {
 
         log("init");
 
@@ -101,7 +100,7 @@ public class MyConsumer {
         ConfigsBuilder configsBuilder = new ConfigsBuilder(streamName, applicationName, kinesisClient, dynamoClient,
                 cloudWatchClient, UUID.randomUUID().toString(), ()->new MyShardRecordProcessor());
 
-        Scheduler scheduler = new Scheduler(
+        scheduler = new Scheduler(
                 //
                 configsBuilder.checkpointConfig(),
                 //
@@ -124,8 +123,16 @@ public class MyConsumer {
         );
 
         new Thread(scheduler).start();
+    }
 
-        // Thread.sleep(5000);
+    @PreDestroy
+    private void close() {
+        log("close");
+        try {
+            scheduler.startGracefulShutdown().get();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     static void log(Object... args) {
